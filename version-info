@@ -1,0 +1,21 @@
+#!/bin/sh
+VERSION_ALPINE="$(cat /etc/alpine-release)";
+printf "alpine:${VERSION_ALPINE}\n";
+
+VERSION_NODE="$(node -v | cut -f 2 -d 'v')";
+printf "node:${VERSION_NODE}\n";
+
+VERSION_NODE_MAJOR="$(printf ${VERSION_NODE} | cut -f 1 -d '.')";
+printf "node_major:${VERSION_NODE_MAJOR}\n";
+
+VERSION_NODE_MINOR="$(printf ${VERSION_NODE} | cut -f 2 -d '.')";
+printf "node_minor:${VERSION_NODE_MINOR}\n";
+
+VERSION_NODE_PATCH="$(printf ${VERSION_NODE} | cut -f 3 -d '.')";
+printf "node_patch:${VERSION_NODE_PATCH}\n";
+
+VERSION_NPM="$(npm -v)";
+printf "npm:${VERSION_NPM}\n";
+
+VERSION_YARN="$(yarn --version)";
+printf "yarn:${VERSION_YARN}\n";

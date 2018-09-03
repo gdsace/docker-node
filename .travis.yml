@@ -1,0 +1,53 @@
+sudo: required
+matrix:
+- language: bash
+- language: node_js
+services:
+- docker
+stages:
+- build
+- release
+branches:
+  except:
+  - /^v[0-9]/
+before_script:
+- docker login -u "${DH_USERNAME}" -p "${DH_PASSWORD}";
+after_script:
+- docker logout
+jobs:
+  include:
+  - stage: build
+    if: branch = master
+    env:
+    - IMAGE_NAME: node6
+    - NODE_MAJOR_VERSION: 6
+    script:
+    - ENVIRONMENT=development ./build.sh "${DH_REPO}" "${IMAGE_NAME}" "NODE_CODE=v${NODE_MAJOR_VERSION}.x";
+    - ENVIRONMENT=production ./build.sh "${DH_REPO}" "${IMAGE_NAME}" "NODE_CODE=v${NODE_MAJOR_VERSION}.x";
+    - ENVIRONMENT=development COMMIT_MESSAGE="${TRAVIS_COMMIT_MESSAGE}" ./publish.sh "${DH_REPO}" "${IMAGE_NAME}";
+    - ENVIRONMENT=production COMMIT_MESSAGE="${TRAVIS_COMMIT_MESSAGE}" ./publish.sh "${DH_REPO}" "${IMAGE_NAME}";
+  - stage: build
+    if: branch = master
+    env:
+    - IMAGE_NAME: node8
+    - NODE_MAJOR_VERSION: 8
+    script:
+    - ENVIRONMENT=development ./build.sh "${DH_REPO}" "${IMAGE_NAME}" "NODE_CODE=v${NODE_MAJOR_VERSION}.x";
+    - ENVIRONMENT=production ./build.sh "${DH_REPO}" "${IMAGE_NAME}" "NODE_CODE=v${NODE_MAJOR_VERSION}.x";
+    - ENVIRONMENT=development COMMIT_MESSAGE="${TRAVIS_COMMIT_MESSAGE}" ./publish.sh "${DH_REPO}" "${IMAGE_NAME}";
+    - ENVIRONMENT=production COMMIT_MESSAGE="${TRAVIS_COMMIT_MESSAGE}" ./publish.sh "${DH_REPO}" "${IMAGE_NAME}";
+  - stage: release
+    if: branch = master
+    env:
+    - TO: github
+    script:
+    - set -e;
+    - |
+      LEVEL=patch;
+      REGEX="\[(major|minor) release\]"; # use a variable otherwise it doesn't work ¯\_(ツ)_/¯
+      git checkout "${TRAVIS_BRANCH}"
+      if [[ "${TRAVIS_COMMIT_MESSAGE}" =~ ${REGEX} ]]; then
+        LEVEL=${BASH_REMATCH[1]}; # BASH_REMATCH is automatically created by BASH when capturing a group
+      fi;
+      npm version "${LEVEL}";
+      git push https://${GH_USERNAME}:${GH_TOKEN}@github.com/gdsace/docker-node.git ${TRAVIS_BRANCH} --tags;
