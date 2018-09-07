@@ -6,7 +6,7 @@ LABEL maintainer="dev@joeir.net" \
 ARG NODE_CODE="v9.x"
 ARG NODE_BUILD_FLAGS=""
 ENV INSTALL_PATH=/tmp
-ENV APK_TO_INSTALL="bash curl gcc g++ make python linux-headers binutils-gold libstdc++ gnupg git" \
+ENV APK_TO_INSTALL="bash curl gcc g++ make python linux-headers binutils-gold libstdc++ gnupg git xvfb" \
     NODE_LATEST_URL="https://nodejs.org/dist/latest-${NODE_CODE}" \
     PATHS_TO_REMOVE="\
       ${INSTALL_PATH}/* \
