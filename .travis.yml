@@ -13,8 +13,8 @@ jobs:
   - stage: build
     if: branch = master
     env:
-    - IMAGE_NAME: node6
-    - NODE_MAJOR_VERSION: 6
+    - IMAGE_NAME: node10
+    - NODE_MAJOR_VERSION: 10
     script:
     - ENVIRONMENT=development ./build.sh "${DH_REPO}" "${IMAGE_NAME}" "NODE_CODE=v${NODE_MAJOR_VERSION}.x";
     - ENVIRONMENT=production ./build.sh "${DH_REPO}" "${IMAGE_NAME}" "NODE_CODE=v${NODE_MAJOR_VERSION}.x";
