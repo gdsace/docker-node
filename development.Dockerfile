@@ -6,7 +6,7 @@ LABEL maintainer="dev@joeir.net" \
 ARG NODE_CODE="v9.x"
 ARG NODE_BUILD_FLAGS=""
 ENV INSTALL_PATH=/tmp
-ENV APK_TO_INSTALL="bash curl jq gcc g++ make python linux-headers binutils-gold libstdc++ gnupg git xvfb" \
+ENV APK_TO_INSTALL="bash curl file gcc g++ jq make python linux-headers binutils-gold libstdc++ gnupg git xvfb" \
     NODE_LATEST_URL="https://nodejs.org/dist/latest-${NODE_CODE}" \
     PATHS_TO_REMOVE="\
       ${INSTALL_PATH}/* \
@@ -66,6 +66,8 @@ RUN apk add --update --upgrade --no-cache ${APK_TO_INSTALL} \
     && make install \
     && chmod +x /usr/bin/version-info \
     && rm -rf ${PATHS_TO_REMOVE} \
-    && mkdir /app
+    && mkdir /app \
+    && npm i -g node-gyp \
+    && mkdir -p /.yarn && chmod 777 -R /.yarn
 WORKDIR /app
 USER root
