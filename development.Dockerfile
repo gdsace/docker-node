@@ -67,7 +67,7 @@ RUN apk add --update --upgrade --no-cache ${APK_TO_INSTALL} \
     && chmod +x /usr/bin/version-info \
     && rm -rf ${PATHS_TO_REMOVE} \
     && mkdir /app \
-    && npm i -g node-gyp \
     && mkdir -p /.yarn && chmod 777 -R /.yarn
-WORKDIR /app
 USER root
+RUN npm i -g node-gyp
+WORKDIR /app
