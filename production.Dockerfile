@@ -1,4 +1,4 @@
-ARG ALPINE_VERSION="3.8.4"
+ARG ALPINE_VERSION="3.10"
 FROM alpine:${ALPINE_VERSION}
 LABEL maintainer="Nebulis" \
       version="1.0.0" \
