@@ -21,7 +21,7 @@ ENV APK_TO_INSTALL="bash curl file gcc g++ jq make python linux-headers binutils
       /usr/share/man/* \
       /var/cache/apk/*" \
     SYSTEM_BIN_PATH=/usr/local/bin/ \
-    YARN_TAR_URL="https://yarnpkg.com/latest.tar.gz" \
+    YARN_TAR_URL="https://classic.yarnpkg.com/latest.tar.gz" \
     YARN_GPG_KEY_URL="https://dl.yarnpkg.com/debian/pubkey.gpg" \
     YARN_INSTALLED_PATH="/usr/local/share/yarn/"
 WORKDIR /tmp
@@ -37,6 +37,7 @@ RUN apk add --update --upgrade --no-cache ${APK_TO_INSTALL} \
       56730D5401028683275BD23C23EFEFE93C4CFFFE \
     && curl -sS ${YARN_GPG_KEY_URL} | gpg --import \
     && curl "${NODE_LATEST_URL}/" | egrep "node-v[0-9]+\.[0-9]+\.[0-9]+\.tar.xz" | cut -d '>' -f 2 | cut -d '<' -f 1 > /tmp/node_filename \
+    && cat /tmp/node_filename \
     && printf "$(cat /tmp/node_filename)" | cut -d 'v' -f 2 | cut -d '.' -f 1,2,3       > /tmp/node_version \
     && printf "${INSTALL_PATH}/node-v$(cat /tmp/node_version)"                          > /tmp/node_install_dir \
     && printf "${INSTALL_PATH}/$(cat /tmp/node_filename)"                               > /tmp/node_install_path \
